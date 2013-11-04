@@ -1,0 +1,23 @@
+name = Munromadness Bagging Form 
+description = Munros Bagging Form incorporate fancy toogle
+package = Munromadness
+core = 7.x
+dependencies[] = "flag"
+
+files[] = munros_bagg.page.inc
+files[] = munros_bagg.theme.inc
+
+files[] = css/munros_bagg_filter.css
+files[] = css/munros_bagg_filter_tab.css
+
+files[] = js/module_filter.js
+files[] = js/module_filter_tab.js
+
+
+
+; Information added by drupal.org packaging script on 2011-09-26
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "munros"
+datestamp = "1317038848"
+

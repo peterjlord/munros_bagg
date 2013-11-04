@@ -1,0 +1,75 @@
+<?php
+function munros_bagg_menu() {
+  $items = array();
+  $items['my-munros/%munros_bagg_user'] = array(
+    'title' => 'My Munros',
+    'page callback' => 'munros_bagg_view_own',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'menu_name' => 'user-menu',
+    'expanded' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => -10
+  );
+  $items['my-munros/%munros_bagg_user/default'] = array(
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'title' => 'Default primary tab',
+    'weight' => 1,
+  );
+  $items["my-munros/%munros_bagg_user/edit"] = array(
+    'type' => MENU_LOCAL_TASK,
+    'title' => 'Edit',
+    'page callback' => 'munros_bagg_change_area_form',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'munros_bagg.page.inc',
+    'weight' => 2,
+  );
+  return $items;
+}
+function munros_bagg_user_to_arg($arg) {
+  global $user; return $user->uid;
+}
+function munros_bagg_user_load($uid=NULL) {
+  if (!isset($uid)) { 
+    $uid = $GLOBALS['user']->uid;
+  } 
+  return $uid; 
+}   
+function munros_bagg_view_own($uid) {
+  return views_embed_view('munros_counters', 'page_1', array($uid));
+}   
+function munros_bagg_view_page($user, $id) { 
+  return "HERE PAGE";
+}
+/**
+ * Implementation of hook_theme().
+ */
+function munros_bagg_theme() {
+  return array(
+    'munros_fieldset' => array(
+      'render element' => 'form',
+      'file' => 'munros_bagg.theme.inc'
+    ),
+    'munros_bagg_munros' => array(
+      'render element' => 'form',
+      'file' => 'munros_bagg.theme.inc'
+    ),
+    'munros_bagg_table' => array(
+      'render element' => 'form',
+      'file' => 'munros_bagg.theme.inc',
+    ),
+    'munros_bagg_tabs' => array(
+      'render element' => 'form',
+      'file' => 'munros_bagg.theme.inc'
+    )
+  );
+}
+function munros_bagg_sort_by_order($a, $b) {
+  if (is_array($a) && is_array($b) && isset($a['#area'], $b['#area'])) {
+		$a = (int) $a['order']['#markup'];
+		$b = (int) $b['order']['#markup'];
+		return $a > $b;
+  }
+  return 0;
+}
