@@ -6,8 +6,9 @@
   Drupal.behaviors.munroFilter = {
     attach: function() {
       $("#munro-filter-wrapper").show();
-      $('name="munro_name"').focus();
-      $('name="munro_name"').keyup(function(e) {
+			$('input[name="munros_filter[munro_name]"]').focus();
+      $('input[name="munros_filter[munro_name]"]').keyup(function(e) {
+
         switch (e.which) {
           case 13:
             if (munroFilterTimeOut) {
@@ -28,28 +29,27 @@
             break;
         }
       });
-      $('input[name="munro_filter[name]"]').keypress(function(e) {
+      $('input[name="munros_filter[munro_name]"]').keypress(function(e) {
         if (e.which == 13) e.preventDefault();
       });
 
       $('#edit-munro-filter-show-enabled').change(function() {
-        munroFilter($('input[name="munro_filter[name]"]').val());
+        munroFilter($('input[name="munros_filter[munro_name]"]').val());
       });
       $('#edit-munro-filter-show-disabled').change(function() {
-        munroFilter($('input[name="munro_filter[name]"]').val());
+        munroFilter($('input[name="munros_filter[munro_name]"]').val());
       });
       $('#edit-munro-filter-show-required').change(function() {
-        munroFilter($('input[name="munro_filter[name]"]').val());
+        munroFilter($('input[name="munros_filter[munro_name]"]').val());
       });
       $('#edit-munro-filter-show-unavailable').change(function() {
-        munroFilter($('input[name="munro_filter[name]"]').val());
+        munroFilter($('input[name="munros_filter[munro_name]"]').val());
       });
     }
   }
 
   munroFilter = function(string) {
     stringLowerCase = string.toLowerCase();
-
     $("fieldset table tbody tr td label > strong").each(function(i) {
       var $row = $(this).parents('tr');
       var munro = $(this).text();

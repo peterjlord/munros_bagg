@@ -10,7 +10,7 @@
   Drupal.behaviors.munroFilter = {
     attach: function() {
       // Set the focus on the munro filter textfield.
-      $('input[name="munro_filter[name]"]').focus();
+      $('input[name="munros_filter[munro_name]"]').focus();
 
       $('#munro-filter-squeeze').css('min-height', $('#munro-filter-tabs').height());
 
@@ -21,7 +21,7 @@
       // Move anchors to top of tabs.
       $('a.anchor', $('#munro-filter-left')).remove().prependTo('#munro-filter-tabs');
 
-      $('input[name="munro_name"]').keyup(function(e) {
+      $('input[name="munros_filter[munro_name]"]').keyup(function(e) {
         switch (e.which) {
           case 13:
             if (Drupal.MunroFilter.timeout) {
@@ -41,20 +41,20 @@
             break;
         }
       });
-      $('input[name="munro_name"]').keypress(function(e) {
+      $('input[name="munros_filter[munro_name]"]').keypress(function(e) {
         if (e.which == 13) e.preventDefault();
       });
 
-      Drupal.MunroFilter.showBagged = $('#edit-show-bagged').is(':checked');
-      $('#edit-show-bagged').change(function() {
+      Drupal.MunroFilter.showBagged = $('#edit-munros-filter-show-bagged').is(':checked');
+      $('#edit-munros-filter-show-bagged').change(function() {
         Drupal.MunroFilter.showBagged = $(this).is(':checked');
 				//alert($('input[name="show[bagged]"]').val());
-        Drupal.MunroFilter.filter($('input[name="show[bagged]"]').val());
+        Drupal.MunroFilter.filter($('input[name="munros_filter[show][bagged]"]').val());
       });
-      Drupal.MunroFilter.showNotBagged = $('#edit-show-notbagged').is(':checked');
-      $('#edit-show-notbagged').change(function() {
+      Drupal.MunroFilter.showNotBagged = $('#edit-munros-filter-show-notbagged').is(':checked');
+      $('#edit-munros-filter-show-notbagged').change(function() {
         Drupal.MunroFilter.showNotBagged = $(this).is(':checked');
-        Drupal.MunroFilter.filter($('input[name="show[notbagged]"]').val());
+        Drupal.MunroFilter.filter($('input[name="munros_filter[show][notbagged]"]').val());
       });
       if (Drupal.settings.munroFilter.visualAid == 1) {
         $('table.area tbody td.checkbox input').change(function() {
@@ -113,7 +113,6 @@
       var $row = $(this).parents('tr');
       var munro = $(this).text();
       var munroLowerCase = munro.toLowerCase();
-
       if (munroLowerCase.match(stringLowerCase)) {
         if (Drupal.MunroFilter.visible($('td.checkbox :checkbox', $row))) {
           $row.removeClass('odd even');

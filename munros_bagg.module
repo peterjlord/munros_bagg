@@ -7,7 +7,6 @@ function munros_bagg_menu() {
     'page arguments' => array(1),
     'access callback' => TRUE,
     'menu_name' => 'user-menu',
-    'expanded' => TRUE,
     'type' => MENU_NORMAL_ITEM,
     'weight' => -10
   );
@@ -19,13 +18,29 @@ function munros_bagg_menu() {
   $items["my-munros/%munros_bagg_user/edit"] = array(
     'type' => MENU_LOCAL_TASK,
     'title' => 'Edit',
-    'page callback' => 'munros_bagg_change_area_form',
-    'page arguments' => array(1),
+		'page callback' => 'drupal_get_form',
+    'page arguments' => array('munros_bagg_form'),
     'access callback' => TRUE,
     'file' => 'munros_bagg.page.inc',
     'weight' => 2,
   );
+  $items['area-munros/%munros_bagg_node/%munros_bagg_user'] = array(
+    'title' => 'My Area',
+		'title callback' => 'munros_bagg_node_title',
+		'title arguments' => array(1, 2),
+    'page callback' => 'munros_bagg_view_another',
+    'page arguments' => array(1, 2),
+    'access callback' => 'munros_bagg_menu_access',
+		'access arguments' => array(1, 2),
+    'menu_name' => 'user-menu',
+    'expanded' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => -10
+  );
   return $items;
+}
+function munros_bagg_menu_access($node, $user) {
+	return TRUE;
 }
 function munros_bagg_user_to_arg($arg) {
   global $user; return $user->uid;
@@ -36,11 +51,32 @@ function munros_bagg_user_load($uid=NULL) {
   } 
   return $uid; 
 }   
+function munros_bagg_node_title($node, $user) {
+	$node = node_load($node);
+	return $node->type . " Munros";
+}
+function munros_bagg_node_to_arg($arg) {
+	if(arg(0) == 'node' && is_numeric(arg(1))) {
+		return arg(1);
+	}
+}
+function munros_bagg_node_load($nid=NULL) {
+	return $nid;
+}   
+
+function munros_bagg_view_another($uid) {
+	return "TESTER";
+}
 function munros_bagg_view_own($uid) {
-  return views_embed_view('munros_counters', 'page_1', array($uid));
+  return views_embed_view('munros_counters', 'page_1', $uid);
 }   
 function munros_bagg_view_page($user, $id) { 
   return "HERE PAGE";
+}
+function munros_bagg_date_popup_process_alter(&$element, &$form_state, $context) {
+  unset($element['date']['#title']);
+	$element['date']['#size'] = 8;
+  unset($element['date']['#description']);
 }
 /**
  * Implementation of hook_theme().
