@@ -1,6 +1,13 @@
 <?php
 function munros_bagg_menu() {
   $items = array();
+	$items['my-munros']	=	array(
+    'title' => 'My Munros',
+    'page callback' => 'munros_bagg_view_forward',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+
+	);
   $items['my-munros/%munros_bagg_user'] = array(
     'title' => 'My Munros',
     'page callback' => 'munros_bagg_view_own',
@@ -40,6 +47,7 @@ function munros_bagg_menu() {
   return $items;
 }
 function munros_bagg_menu_access($node, $user) {
+	return FALSE;
 	return TRUE;
 }
 function munros_bagg_user_to_arg($arg) {
@@ -52,8 +60,10 @@ function munros_bagg_user_load($uid=NULL) {
   return $uid; 
 }   
 function munros_bagg_node_title($node, $user) {
+	if(arg(0)=='node') {
 	$node = node_load($node);
-	return $node->type . " Munros";
+		return $node->type . " Munros";
+	}
 }
 function munros_bagg_node_to_arg($arg) {
 	if(arg(0) == 'node' && is_numeric(arg(1))) {
@@ -63,9 +73,14 @@ function munros_bagg_node_to_arg($arg) {
 function munros_bagg_node_load($nid=NULL) {
 	return $nid;
 }   
-
 function munros_bagg_view_another($uid) {
 	return "TESTER";
+}
+function munros_bagg_view_forward() {
+	global  $user;
+	if(is_numeric($user->uid)) {
+		drupal_goto("my-munros/" . $user->uid);
+	}
 }
 function munros_bagg_view_own($uid) {
   return views_embed_view('munros_counters', 'page_1', $uid);
